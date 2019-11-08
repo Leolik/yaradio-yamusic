@@ -5,10 +5,11 @@ const {
   BrowserWindow,
   session
 } = require('electron');
-const store = require('./modules/store/store');
-const ctxMenu = require('./modules/menu/ctxMenu');
-const globalShortcut = require('./modules/globalShortcut');
-const notifiNextSing = require('./modules/notifiNextSing');
+const store = require('./src/store/store');
+const contextMenu = require('./src/menu/contextMenu');
+const dockMenu = require('./src/menu/dockMenu');
+const globalShortcut = require('./src/menu/globalShortcut');
+const nextSongNotification = require('./src/notification/nextSong');
 
 if (process.env.node_env == 'dev')
   require('electron-debug')({
@@ -33,8 +34,8 @@ app.on('second-instance', () => {
 })
 
 function createWindow() {
-  const lastWindowState = store.get('lastWindowState'),
-    lastApp = store.get('lastApp');
+  const lastWindowState = store.get('lastWindowState')
+  const lastApp = store.get('lastApp');
 
   const win = new BrowserWindow({
     title: 'YaRadio',
@@ -50,11 +51,12 @@ function createWindow() {
     autoHideMenuBar: true,
     backgroundColor: '#fff',
     webPreferences: {
-      preload: path.join(__dirname, 'modules/js', 'browser.js'),
+      preload: path.join(__dirname, 'src/runtime/js', 'browser.js'),
       nodeIntegration: false,
       plugins: true
     }
   })
+
   win.loadURL((() => {
     if (lastApp == 'YaMusic') {
       return 'https://music.yandex.ru/'
@@ -102,16 +104,17 @@ function createWindow() {
 
 app.on("ready", () => {
   win = createWindow()
-  ctxMenu.create(win, app);
+  contextMenu.create(win, app);
+  dockMenu.create(win, app)
   globalShortcut.init(win, app);
   win.setMenu(null);
   let page = win.webContents;
   page.on('dom-ready', () => {
-    page.insertCSS(fs.readFileSync(path.join(__dirname, '/modules/css', 'css.css'), 'utf8'));
+    page.insertCSS(fs.readFileSync(path.join(__dirname, '/src/runtime/css', 'styles.css'), 'utf8'));
     win.show();
   })
 
-  let sendNotifi = notifiNextSing.init(win);
+  let notify = nextSongNotification.init(win);
 
   session.defaultSession.webRequest.onBeforeRequest(['*'], (details, callback) => {
     // Skip advertising
@@ -120,9 +123,9 @@ app.on("ready", () => {
         cancel: true
       }
     }
-    // Notification for next sing
+    // Notification for next song
     if (/start\?__t/.test(details.url)) {
-      setTimeout(sendNotifi, 1000)
+      setTimeout(notify, 1000)
     }
 
     callback(details);

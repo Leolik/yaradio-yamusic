@@ -16,12 +16,19 @@ const el = {
   activeStation: '.page-index .station_playing'
 };
 
+/**
+ * @param {string} command 
+ */
 function exec(command) {
   webFrame.executeJavaScript(`if (!window.a) a = new Mu.Adapter(); ${command};`);
 }
 
-function click(s) {
-  const e = document.querySelector(s);
+/**
+ * 
+ * @param {*} querySelector
+ */
+function click(querySelector) {
+  const e = document.querySelector(querySelector);
   if (e) {
     e.click();
   }
@@ -74,7 +81,19 @@ function initMusic() {
   addSwitcher('no__active', '');
 }
 
-// Switching between radio and music
+/**
+ * @param {string} selector 
+ * @param {HTMLElement} parent 
+ * @returns {HTMLElement}
+ */
+function queryElement(selector, parent) {
+  return parent.querySelector(selector)
+}
+/**
+ * Switching between radio and music
+ * @param {string} yandexRadioClass 
+ * @param {string} yandexMusicClass 
+ */
 function addSwitcher(yandexRadioClass, yandexMusicClass) {
   let divBlock = document.createElement("div");
   divBlock.className = 'block-selector';
@@ -87,11 +106,13 @@ function addSwitcher(yandexRadioClass, yandexMusicClass) {
     divBlock.style.left = '5rem'
   }
 
-  divBlock.querySelector('.yaradio').onclick = () => {
-    window.location = 'https://radio.yandex.ru/'
+  const yaradio = queryElement('.yaradio', divBlock);
+  yaradio.onclick = () => {
+    window.location.href = 'https://radio.yandex.ru/'
   };
-  divBlock.querySelector('.yamusic').onclick = () => {
-    window.location = 'https://music.yandex.ru/'
+  const yamusic = queryElement('.yamusic', divBlock);
+  yamusic.onclick = () => {
+    window.location.href = 'https://music.yandex.ru/'
   };
 
   let pageRoot = document.querySelector('.page-root');

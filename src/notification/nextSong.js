@@ -1,4 +1,4 @@
-const notification = require('./notification/notification')
+const notification = require('./notification')
 
 const getTrack = `
   ;(function(){
@@ -38,25 +38,30 @@ const getImg = `
   })();
 `;
 
+/**
+ * @param {Electron.BrowserWindow} win
+ */
 exports.init = (win) => {
 
-  return sendNotifi
+  return notify
 
-  function sendNotifi() {
-    Promise.all([getInfoFromDOM(getTrack), getInfoFromDOM(getArtist), getInfoFromDOM(getImg)]).then((v) => {
-      if (v[0] && v[1]) {
-        notification.notifi(v[0], v[1], v[2]);
+  function notify() {
+    Promise.all([getInfoFromDOM(getTrack), getInfoFromDOM(getArtist), getInfoFromDOM(getImg)]).then(([track, artist, image]) => {
+      if (track && artist) {
+        notification.notifi(track, artist, image);
       }
     })
   }
 
+  /**
+   * @param {string} command 
+   */
   async function getInfoFromDOM(command) {
     let checkData = async () => {
       return await win.webContents.executeJavaScript(command);
     }
     return await checkData()
   }
-
 }
 
 // Util

@@ -2,26 +2,33 @@ const {
   globalShortcut
 } = require('electron');
 
+/**
+ * @param {Electron.BrowserWindow} win
+ */
 function shortcutTpl(win) {
   return [{
       accelerator: 'MediaPlayPause',
-      func: () => win.send('play'),
+      func: () => win.webContents.send('play'),
     },
     {
       accelerator: 'MediaNextTrack',
-      func: () => win.send('next'),
+      func: () => win.webContents.send('next'),
     },
     {
       accelerator: 'MediaPreviousTrack',
-      func: () => win.send('prev'),
+      func: () => win.webContents.send('prev'),
     },
     {
       accelerator: 'VolumeMute',
-      func: () => win.send('mute'),
+      func: () => win.webContents.send('mute'),
     },
   ]
 }
 
+/**
+ * @param {Electron.BrowserWindow} win
+ * @param {Electron.App} app
+ */
 exports.init = (win, app) => {
   const tplShortcut = shortcutTpl(win);
 

@@ -4,15 +4,25 @@ const store = require('../store/store');
 const rp = require('request-promise');
 const fs = require('mz/fs')
 
+/**
+ * @param {string} title
+ * @param {string} msg
+ * @param {string} [img]
+ * @param {boolean} [force]
+ */
 exports.notifi = async (title, msg, img, force) => {
   let sendNotify = function () {
     notifier.notify({
       title: title || 'YaRadio',
       message: msg || '-',
-      icon: img ? path.join(__dirname, '../../media/tmp', '100x100.jpeg') : path.join(__dirname, '../../media/icon', 'yaradio_64x64.png'),
+      icon: img ? path.join(__dirname, '../../media/', '100x100.jpeg') : path.join(__dirname, '../../media/icon', 'yaradio_64x64.png'),
       sound: false,
       wait: false
-    }, function (err) {
+    },
+     /**
+     * @param {any} err
+     */
+    function (err) {
       if (err) {
         console.log('Error: Notifier', err);
       }
@@ -25,7 +35,7 @@ exports.notifi = async (title, msg, img, force) => {
         console.log('Error: Notifier', err);
       })
 
-      await fs.writeFile(path.join(__dirname, '../../media/tmp', '100x100.jpeg'), dataImg, { encoding: 'binary' }).catch((err) => {
+      await fs.writeFile(path.join(__dirname, '../../media/', '100x100.jpeg'), dataImg, { encoding: 'binary' }).catch((err) => {
         console.log('Error: Notifier', err);
       })
 
