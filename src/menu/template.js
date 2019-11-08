@@ -41,11 +41,13 @@ exports.menuTemplate = function(win, app) {
 			submenu: [{
 				type: 'checkbox',
 				label: 'Notification',
-				checked: store.get('settings.notifications'),
+				checked: store.get('settings').notifications,
 				click: () => {
-					let value = !store.get('settings.notifications');
+					const settings = store.get('settings');
+					const value = !settings.notifications;
 					notification.notifi('Settings', value ? 'Notification enabled' : 'Notification disabled', undefined, true);
-					store.set('settings.notifications', value);
+					settings.notifications = value
+					store.set('settings', settings);
 				}
 			}]
 		},

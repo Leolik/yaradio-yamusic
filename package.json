@@ -34,17 +34,16 @@
     },
     "homepage": "https://github.com/dedpnd/yaradio-yamusic#readme",
     "dependencies": {
-        "electron": "^4.2.10",
-        "electron-context-menu": "^0.11.0",
-        "electron-debug": "^2.2.0",
-        "electron-store": "^2.0.0",
+        "electron": "^7.1.0",
+        "electron-context-menu": "^0.15.0",
+        "electron-debug": "^3.0.1",
+        "electron-store": "^5.1.0",
         "mz": "^2.7.0",
-        "node-notifier": "^5.4.3",
+        "node-notifier": "^6.0.0",
         "request": "^2.88.0",
-        "request-promise": "^4.2.4"
+        "request-promise": "^4.2.5"
     },
     "devDependencies": {
-        "@types/electron-store": "^3.2.0",
         "@types/jquery": "^3.3.31",
         "@types/mz": "0.0.32",
         "@types/node-notifier": "^5.4.0",

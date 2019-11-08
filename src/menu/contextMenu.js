@@ -18,9 +18,5 @@ exports.create = (win, app) => {
 	appIcon.addListener('click', (e) => {
 		e.preventDefault();
 		toggleWindowVisibility(win);
-	})
-
-	win.on('show', function () {
-		appIcon.setHighlightMode('always')
-	})
+	});
 }

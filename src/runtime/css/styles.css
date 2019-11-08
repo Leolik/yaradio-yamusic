@@ -126,3 +126,7 @@ div.footer-app-install {
 .no__active {
   opacity: 0.3;
 }
+
+.head {
+  -webkit-app-region: drag
+}

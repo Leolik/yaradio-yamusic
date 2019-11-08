@@ -19,17 +19,17 @@ exports.notifi = async (title, msg, img, force) => {
       sound: false,
       wait: false
     },
-     /**
-     * @param {any} err
-     */
-    function (err) {
-      if (err) {
-        console.log('Error: Notifier', err);
-      }
-    })
+      /**
+      * @param {any} err
+      */
+      function (err) {
+        if (err) {
+          console.log('Error: Notifier', err);
+        }
+      })
   }
 
-  if (store.get('settings.notifications')) {
+  if (store.get('settings').notifications) {
     if (img) {
       let dataImg = await rp.get(img, { encoding: 'binary' }).catch((err) => {
         console.log('Error: Notifier', err);

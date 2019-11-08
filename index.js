@@ -45,7 +45,8 @@ function createWindow() {
     height: lastWindowState.height || 700,
     width: lastWindowState.width || 848,
     icon: path.join(__dirname, 'media/icon', 'yaradio.png'),
-    titleBarStyle: 'hiddenInset',
+    titleBarStyle: 'customButtonsOnHover',
+    movable: true,
     minHeight: 700,
     minWidth: 848,
     autoHideMenuBar: true,
@@ -116,7 +117,7 @@ app.on("ready", () => {
 
   let notify = nextSongNotification.init(win);
 
-  session.defaultSession.webRequest.onBeforeRequest(['*'], (details, callback) => {
+  session.defaultSession.webRequest.onBeforeRequest((details, callback) => {
     // Skip advertising
     if (/awaps.yandex.net/.test(details.url) || /vh-bsvideo-converted/.test(details.url) || /get-video-an/.test(details.url)) {
       return {
@@ -133,7 +134,7 @@ app.on("ready", () => {
 })
 
 app.on('before-quit', () => {
-  store.set('quit?', true);
+  store.set('quit', true);
 
   if (!win.isFullScreen()) {
     store.set('lastWindowState', win.getBounds());
