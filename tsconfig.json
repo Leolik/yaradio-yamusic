@@ -1,21 +1,25 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "target": "es2017",
+    "target": "es2019",
     "lib": [
       "es2019",
       "dom",
       "dom.iterable"
     ],
-    "sourceMap": true,
+    "sourceMap": false,
     "experimentalDecorators": true,
     "strict": true,
-    "baseUrl": ".",
     "allowJs": true,
     "noUnusedLocals": true,
     "outDir": "build",
     "checkJs": true,
-    "strictNullChecks": false
+    "strictNullChecks": false,
+    "noImplicitAny": true,
+    "baseUrl": ".",
+    "paths": {
+      "*": ["node_modules/*"]
+    }
   },
   "include": [
     "./src/**/*"

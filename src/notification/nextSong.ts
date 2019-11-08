@@ -1,4 +1,5 @@
-const notification = require('./notification')
+import { notify } from "./notification";
+import { BrowserWindow } from "electron";
 
 const getTrack = `
   ;(function(){
@@ -38,33 +39,23 @@ const getImg = `
   })();
 `;
 
-/**
- * @param {Electron.BrowserWindow} win
- */
-exports.init = (win) => {
-
-  return notify
-
-  function notify() {
-    Promise.all([getInfoFromDOM(getTrack), getInfoFromDOM(getArtist), getInfoFromDOM(getImg)]).then(([track, artist, image]) => {
-      if (track && artist) {
-        notification.notifi(track, artist, image);
-      }
-    })
-  }
-
-  /**
-   * @param {string} command 
-   */
-  async function getInfoFromDOM(command) {
-    let checkData = async () => {
-      return await win.webContents.executeJavaScript(command);
-    }
-    return await checkData()
-  }
+async function getInfoFromDOM(command: string, win: BrowserWindow) {
+  const checkData = async () => {
+    return await win.webContents.executeJavaScript(command);
+  };
+  return await checkData();
 }
 
-// Util
-// function delay(millis) {
-//   return new Promise((resolve) => setTimeout(resolve, millis));
-// }
+export const notifyNextSongHandler = (win: BrowserWindow) => {
+  return () => {
+    Promise.all([
+      getInfoFromDOM(getTrack, win),
+      getInfoFromDOM(getArtist, win),
+      getInfoFromDOM(getImg, win)
+    ]).then(([track, artist, image]) => {
+      if (track && artist) {
+        notify(track, artist, image);
+      }
+    });
+  };
+};

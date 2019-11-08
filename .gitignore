@@ -2,3 +2,5 @@
 /distr
 /media/tmp
 media/*.jpeg
+/build/
+.DS_Store
