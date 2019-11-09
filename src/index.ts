@@ -3,9 +3,12 @@ import * as path from "path";
 import { register as registerContextMenu } from "./controls/contextMenu";
 import { register as registerDockMenu } from "./controls/dockMenu";
 import { register as registerGlobalShortcuts } from "./controls/globalShortcut";
+import { register as registerTaskbarMenu } from "./controls/taskbarMenu";
+
 import { notifyNextSongHandler } from "./notification/nextSong";
 import { store } from "./store/store";
 import fs = require("mz/fs");
+import { currentPlatform, PlatformType } from "./platform";
 
 if (process.env.node_env === "dev") {
   // tslint:disable-next-line: no-var-requires
@@ -35,15 +38,16 @@ function createWindow() {
   const lastWindowState = store.get("lastWindowState");
   const lastApp = store.get("lastApp");
 
+  const titleBarStyle = (currentPlatform.isMacOs) ? "customButtonsOnHover" : "hiddenInset";
   const mainWindow = new BrowserWindow({
-    title: "YaRadio",
+    title: "Yandex.Music.App - Unofficial",
     show: false,
     x: lastWindowState.x === -1 ? undefined : lastWindowState.x,
     y: lastWindowState.y === -1 ? undefined : lastWindowState.y,
     height: lastWindowState.height || 700,
     width: lastWindowState.width || 848,
-    icon: path.join(__dirname, "media/icon", "yaradio.png"),
-    titleBarStyle: "customButtonsOnHover",
+    icon: path.join(__dirname, "media/icon", "yaradio_32x32.png"),
+    titleBarStyle: titleBarStyle,
     movable: true,
     minHeight: 700,
     minWidth: 848,
@@ -68,45 +72,33 @@ function createWindow() {
       e.preventDefault();
     }
 
-    switch (process.platform) {
-      case "win32":
+    switch (currentPlatform.type) {
+      case PlatformType.Windows:
         mainWindow.hide();
         break;
-      case "linux":
+      case PlatformType.Linux:
         mainWindow.hide();
         break;
-      case "darwin":
+      case PlatformType.MacOs:
         app.hide();
         break;
       default:
     }
   });
-
-  mainWindow.on("page-title-updated", (event) => {
-    // @ts-ignore
-    const history = mainWindow.webContents.history;
-    if (/radio/.test(history[history.length - 1])) {
-      mainWindow.setTitle("YaRadio");
-      if (process.platform !== "darwin") {
-        mainWindow.setIcon(path.join(__dirname, "media/icon", "yaradio_32x32.png"));
-      }
-    } else {
-      mainWindow.setTitle("YaMusic");
-      if (process.platform !== "darwin") {
-        mainWindow.setIcon(path.join(__dirname, "media/icon", "yamusic_32x32.png"));
-      }
-    }
-    event.preventDefault();
-  });
-
+  
   return mainWindow;
 }
 
 app.on("ready", () => {
   win = createWindow();
   registerContextMenu(win, app);
-  registerDockMenu(win, app);
   registerGlobalShortcuts(win, app);
+  if (currentPlatform.isMacOs) {
+    registerDockMenu(win, app);
+  }
+  if (currentPlatform.isWindows) {
+    registerTaskbarMenu(win, app);
+  }
   win.setMenu(null);
 
   const page = win.webContents;
@@ -119,8 +111,8 @@ app.on("ready", () => {
 
   session.defaultSession.webRequest.onBeforeRequest({ urls: ["*://*/*"] }, (details, callback) => {
     if (/awaps.yandex.net/.test(details.url)
-    || /vh-bsvideo-converted/.test(details.url)
-    || /get-video-an/.test(details.url)) {
+      || /vh-bsvideo-converted/.test(details.url)
+      || /get-video-an/.test(details.url)) {
       callback({ cancel: true });
       return;
     }

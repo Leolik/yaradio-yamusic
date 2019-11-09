@@ -1,4 +1,4 @@
-import { notify } from "./notification";
+import { notify } from "./electron";
 import { BrowserWindow } from "electron";
 
 const getTrack = `
