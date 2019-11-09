@@ -11,7 +11,7 @@ export const register = (win: BrowserWindow, app: App) => {
   );
   const dockMenu = Menu.buildFromTemplate(items);
 
-  if (app.dock.setMenu) {
+  if (app.dock) {
     app.dock.setMenu(dockMenu);
   }
 };
