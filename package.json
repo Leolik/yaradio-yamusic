@@ -7,8 +7,8 @@
     "scripts": {
         "copy-media": "copyfiles \"media/**/*\" build/",
         "copy-css": "copyfiles -u 1 \"src/**/*.css\" build/",
-        "copy-package": "copyfiles *.json build/",
-        "package": "npm run copy-css && npm run copy-media && npm run copy-package; cd build; npm install --production; cd ../",
+        "copy-package": "copyfiles \"*.json\" build/",
+        "package": "npm run copy-css && npm run copy-media && npm run copy-package && (cd build && npm install --production && cd ../)",
         "build": "tsc",
         "watch": "tsc -w",
         "lint": "tslint -c tslint.json -p tsconfig.json",
