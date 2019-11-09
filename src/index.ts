@@ -1,22 +1,14 @@
 import { app, BrowserWindow, session } from "electron";
+import * as fs from "mz/fs";
 import * as path from "path";
+import { setAppBasePath, getIconFile } from "./app/media";
+import { nextSongHandler } from "./app/nextSong";
+import { currentPlatform, PlatformType } from "./app/platform";
 import { register as registerContextMenu } from "./controls/contextMenu";
 import { register as registerDockMenu } from "./controls/dockMenu";
 import { register as registerGlobalShortcuts } from "./controls/globalShortcut";
 import { register as registerTaskbarMenu } from "./controls/taskbarMenu";
-
-import { notifyNextSongHandler } from "./notification/nextSong";
 import { store } from "./store/store";
-import fs = require("mz/fs");
-import { currentPlatform, PlatformType } from "./platform";
-
-if (process.env.node_env === "dev") {
-  // tslint:disable-next-line: no-var-requires
-  require("electron-debug")({
-    enabled: true,
-    showDevTools: "undocked"
-  });
-}
 
 let win: BrowserWindow;
 const appRunning = app.requestSingleInstanceLock();
@@ -24,6 +16,8 @@ const appRunning = app.requestSingleInstanceLock();
 if (!appRunning) {
   app.quit();
 }
+
+setAppBasePath(app);
 
 app.on("second-instance", () => {
   if (win) {
@@ -38,7 +32,7 @@ function createWindow() {
   const lastWindowState = store.get("lastWindowState");
   const lastApp = store.get("lastApp");
 
-  const titleBarStyle = (currentPlatform.isMacOs) ? "customButtonsOnHover" : "hiddenInset";
+  const titleStyle = (currentPlatform.isMacOs) ? "customButtonsOnHover" : "hiddenInset";
   const mainWindow = new BrowserWindow({
     title: "Yandex.Music.App - Unofficial",
     show: false,
@@ -46,8 +40,8 @@ function createWindow() {
     y: lastWindowState.y === -1 ? undefined : lastWindowState.y,
     height: lastWindowState.height || 700,
     width: lastWindowState.width || 848,
-    icon: path.join(__dirname, "media/icon", "yaradio_32x32.png"),
-    titleBarStyle: titleBarStyle,
+    icon: getIconFile("yaradio_32x32.png"),
+    titleBarStyle: titleStyle,
     movable: true,
     minHeight: 700,
     minWidth: 848,
@@ -56,9 +50,14 @@ function createWindow() {
     webPreferences: {
       preload: path.join(__dirname, "runtime/js", "browser.js"),
       nodeIntegration: false,
-      plugins: true
+      plugins: true,
+      enableRemoteModule: false
     }
   });
+
+  mainWindow.webContents.openDevTools({
+    mode: "undocked"
+  })
 
   mainWindow.loadURL((() => {
     if (lastApp === "YaMusic") {
@@ -85,7 +84,7 @@ function createWindow() {
       default:
     }
   });
-  
+
   return mainWindow;
 }
 
@@ -107,7 +106,7 @@ app.on("ready", () => {
     win.show();
   });
 
-  const notify = notifyNextSongHandler(win);
+  const notify = nextSongHandler(win);
 
   session.defaultSession.webRequest.onBeforeRequest({ urls: ["*://*/*"] }, (details, callback) => {
     if (/awaps.yandex.net/.test(details.url)

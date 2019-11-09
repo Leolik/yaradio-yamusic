@@ -1,5 +1,6 @@
-import { notify } from "./electron";
+import { notify } from "./notification";
 import { BrowserWindow } from "electron";
+import { fetchAlbumArt } from "./fetchArt";
 
 const getTrack = `
   ;(function(){
@@ -46,7 +47,7 @@ async function getInfoFromDOM(command: string, win: BrowserWindow) {
   return await checkData();
 }
 
-export const notifyNextSongHandler = (win: BrowserWindow) => {
+export const nextSongHandler = (win: BrowserWindow) => {
   return () => {
     Promise.all([
       getInfoFromDOM(getTrack, win),
@@ -54,7 +55,13 @@ export const notifyNextSongHandler = (win: BrowserWindow) => {
       getInfoFromDOM(getImg, win)
     ]).then(([track, artist, image]) => {
       if (track && artist) {
-        notify(track, artist, image);
+        if (image) {
+          fetchAlbumArt(image).then(fetched => {
+            notify(track, artist, fetched);
+          });
+        } else {
+          notify(track, artist, false);
+        }
       }
     });
   };

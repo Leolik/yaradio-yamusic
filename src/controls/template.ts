@@ -1,5 +1,5 @@
 import { App, BrowserWindow, MenuItemConstructorOptions } from "electron";
-import { notify } from "../notification/electron";
+import { notify } from "../app/notification";
 import { store } from "../store/store";
 
 export const menuSettings: MenuItemConstructorOptions = {
