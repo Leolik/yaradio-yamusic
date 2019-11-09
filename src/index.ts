@@ -55,9 +55,11 @@ function createWindow() {
     }
   });
 
-  mainWindow.webContents.openDevTools({
-    mode: "undocked"
-  })
+  if (process.env.node_env === "dev") {
+    mainWindow.webContents.openDevTools({
+      mode: "undocked"
+    });
+  }
 
   mainWindow.loadURL((() => {
     if (lastApp === "YaMusic") {
