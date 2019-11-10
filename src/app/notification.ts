@@ -7,6 +7,7 @@ const create = (titleText: string, msg: string, imagePath: string): Notification
         title: titleText,
         icon: imagePath,
         body: msg,
+        silent: true
     });
 };
 
