@@ -4,16 +4,16 @@ export const enum PlatformType {
 }
 
 export class Platform {
+    public isWindows = this.type === PlatformType.Windows;
+    public isMacOs = this.type === PlatformType.MacOs;
+    public isLinux = this.type === PlatformType.Linux;
     constructor(public type: PlatformType) { }
-    public isWindows = this.type === PlatformType.Windows
-    public isMacOs = this.type === PlatformType.MacOs
-    public isLinux = this.type === PlatformType.Linux
 }
 
 export const currentPlatform = createPlatform();
 
 function createPlatform(): Platform {
-    let type: PlatformType
+    let type: PlatformType;
     switch (process.platform) {
         case "win32":
             type = PlatformType.Windows;

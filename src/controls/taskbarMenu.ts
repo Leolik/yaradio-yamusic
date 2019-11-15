@@ -1,18 +1,19 @@
 import { App, BrowserWindow, nativeImage } from "electron";
-import { getIconFile } from "./../app/media";
+import { getImageFile } from "./../app/media";
 
 export const register = (win: BrowserWindow, app: App) => {
-    const iconPath = getIconFile("yaradio_16x16.png");
 
-    win.setThumbarButtons([
+    const result = win.setThumbarButtons([
         {
             tooltip: "Play | Pause",
-            icon: nativeImage.createFromPath(iconPath),
+            icon: nativeImage.createFromPath(getImageFile("play_arrow_white_18dp.png")),
             click: () => win.webContents.send("play")
         }, {
             tooltip: "Next",
-            icon: nativeImage.createFromPath(iconPath),
+            icon: nativeImage.createFromPath(getImageFile("skip_next_white_18dp.png")),
             click: () => win.webContents.send("next")
         }
-    ])
+    ]);
+
+    return result;
 };

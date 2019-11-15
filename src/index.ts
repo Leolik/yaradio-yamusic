@@ -1,13 +1,15 @@
 import { app, BrowserWindow, session } from "electron";
 import * as fs from "mz/fs";
 import * as path from "path";
-import { setAppBasePath, getIconFile } from "./app/media";
+import { setAppBasePath, getRuntimePath } from "./app/media";
 import { nextSongHandler } from "./app/nextSong";
 import { currentPlatform, PlatformType } from "./app/platform";
+import { createWindow } from "./app/window";
 import { register as registerContextMenu } from "./controls/contextMenu";
 import { register as registerDockMenu } from "./controls/dockMenu";
 import { register as registerGlobalShortcuts } from "./controls/globalShortcut";
 import { register as registerTaskbarMenu } from "./controls/taskbarMenu";
+import { settings } from "./store/settings";
 import { store } from "./store/store";
 
 let win: BrowserWindow;
@@ -28,57 +30,32 @@ app.on("second-instance", () => {
   }
 });
 
-function createWindow() {
+app.on("ready", () => {
   const lastWindowState = store.get("lastWindowState");
   const lastApp = store.get("lastApp");
-
-  const titleStyle = (currentPlatform.isMacOs) ? "customButtonsOnHover" : "hiddenInset";
-  const mainWindow = new BrowserWindow({
-    title: "Yandex.Music.App - Unofficial",
-    show: false,
-    x: lastWindowState.x === -1 ? undefined : lastWindowState.x,
-    y: lastWindowState.y === -1 ? undefined : lastWindowState.y,
-    height: lastWindowState.height || 700,
-    width: lastWindowState.width || 848,
-    icon: getIconFile("yaradio_32x32.png"),
-    titleBarStyle: titleStyle,
-    movable: true,
-    minHeight: 700,
-    minWidth: 848,
-    autoHideMenuBar: true,
-    backgroundColor: "#fff",
-    webPreferences: {
-      preload: path.join(__dirname, "runtime/js", "browser.js"),
-      nodeIntegration: false,
-      plugins: true,
-      enableRemoteModule: false
-    }
-  });
+  win = createWindow(lastWindowState);
 
   if (process.env.node_env === "dev") {
-    mainWindow.webContents.openDevTools({
+    win.webContents.openDevTools({
       mode: "undocked"
     });
   }
 
-  mainWindow.loadURL((() => {
-    if (lastApp === "YaMusic") {
-      return "https://music.yandex.ru/";
+  win.on("close", (e) => {
+    if (settings.quitOnClose) {
+      return;
     }
-    return "https://radio.yandex.ru/";
-  })());
 
-  mainWindow.on("close", (e) => {
     if (!store.get("quit")) {
       e.preventDefault();
     }
 
     switch (currentPlatform.type) {
       case PlatformType.Windows:
-        mainWindow.hide();
+        win.hide();
         break;
       case PlatformType.Linux:
-        mainWindow.hide();
+        win.hide();
         break;
       case PlatformType.MacOs:
         app.hide();
@@ -87,24 +64,23 @@ function createWindow() {
     }
   });
 
-  return mainWindow;
-}
+  win.loadURL((() => {
+    if (lastApp === "YaMusic") {
+      return "https://music.yandex.ru/";
+    }
+    return "https://radio.yandex.ru/";
+  })());
 
-app.on("ready", () => {
-  win = createWindow();
+  win.setMenu(null);
   registerContextMenu(win, app);
   registerGlobalShortcuts(win, app);
   if (currentPlatform.isMacOs) {
     registerDockMenu(win, app);
   }
-  if (currentPlatform.isWindows) {
-    registerTaskbarMenu(win, app);
-  }
-  win.setMenu(null);
 
   const page = win.webContents;
   page.on("dom-ready", () => {
-    page.insertCSS(fs.readFileSync(path.join(__dirname, "/runtime/css", "styles.css"), "utf8"));
+    page.insertCSS(fs.readFileSync(path.join(getRuntimePath(), "css", "styles.css"), "utf8"));
     win.show();
   });
 
@@ -120,6 +96,9 @@ app.on("ready", () => {
     // Notification for next song
     if (/start\?__t/.test(details.url)) {
       setTimeout(notify, 1000);
+      if (currentPlatform.isWindows) {
+        setTimeout(() => registerTaskbarMenu(win, app), 100);
+      }
     }
     callback({});
   });

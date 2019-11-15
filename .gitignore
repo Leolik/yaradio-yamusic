@@ -4,3 +4,4 @@
 media/*.jpeg
 /build/
 .DS_Store
+tsconfig.tsbuildinfo

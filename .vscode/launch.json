@@ -13,8 +13,9 @@
             "windows": {
               "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
             },
-            "args" : ["."],
-            "outputCapture": "std"
+            "args" : ["build/index.js"],
+            "outputCapture": "std",
+            "preLaunchTask": "npm: build",
           }
     ]
 }

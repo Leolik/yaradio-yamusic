@@ -15,9 +15,9 @@
         "start": "npm run build && npm run package && electron ./build/index.js",
         "s:dev": "set NODE_ENV=dev && npm run start",
         "package:all": "npm run package:win && npm run package:linux && npm run package:mac",
-        "package:win": "npm run package && electron-packager build/ --platform=win32 --arch=all --icon=build/media/icon/yaradio_64x64.ico --name=yaMusic --executableName=yaMusic --out=distr/win --overwrite=true",
-        "package:linux": "npm run package && electron-packager build/ --platform=linux --arch=all --icon=build/media/icon/yaradio_64x64.ico --name=yaMusic --executableName=yaMusic --out=distr/linux --overwrite=true",
-        "package:mac": "npm run package && electron-packager build/ --platform=darwin,mas --arch=x64 --icon=build/media/icon/yaradio_64x64.icns --name=yaMusic --executableName=yaMusic --out=distr/mac --overwrite=true --app-bundle-id=info.anodsplace.yamusic --app-category-type=public.app-category.music",
+        "package:win": "npm run package && electron-packager build/ --platform=win32 --arch=all --icon=build/media/icon/yaradio_64x64.ico --out=distr/win --overwrite=true",
+        "package:linux": "npm run package && electron-packager build/ --platform=linux --arch=all --icon=build/media/icon/yaradio_64x64.ico  --out=distr/linux --overwrite=true",
+        "package:mac": "npm run package && electron-packager build/ --platform=darwin,mas --arch=x64 --icon=build/media/icon/yaradio_64x64.icns --out=distr/mac --overwrite=true --app-bundle-id=info.anodsplace.yamusic --app-category-type=public.app-category.music",
         "gen:changelog": "github_changelog_generator -u dedpnd -p yaradio-yamusic"
     },
     "repository": {

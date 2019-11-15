@@ -1,6 +1,23 @@
 import * as Store from "electron-store";
 
-export const store = new Store({
+export interface SettingsModel {
+  notifications: boolean;
+  quitOnClose: boolean;
+}
+
+const defaultSettings: SettingsModel = {
+  notifications: true,
+  quitOnClose: true
+};
+
+interface StoreType {
+  lastApp: string;
+  lastWindowState: Electron.Rectangle;
+  quit: boolean;
+  settings: SettingsModel;
+}
+
+export const store = new Store<StoreType>({
   defaults: {
     lastApp: "",
     lastWindowState: {
@@ -10,9 +27,7 @@ export const store = new Store({
       height: 848
     },
     quit: false,
-    settings: {
-      notifications: true,
-    },
+    settings: defaultSettings,
   }
 });
 

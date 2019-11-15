@@ -1,22 +1,32 @@
 import { App, BrowserWindow, MenuItemConstructorOptions } from "electron";
 import { notify } from "../app/notification";
-import { store } from "../store/store";
+import { settings } from "../store/settings";
+import { currentPlatform } from "../app/platform";
 
 export const menuSettings: MenuItemConstructorOptions = {
     type: "submenu",
     label: "Settings",
-    submenu: [{
-        type: "checkbox",
-        label: "Notification",
-        checked: store.get("settings").notifications,
-        click: () => {
-            const settings = store.get("settings");
-            const value = !settings.notifications;
-            notify("Settings", value ? "Notification enabled" : "Notification disabled", undefined);
-            settings.notifications = value;
-            store.set("settings", settings);
-        }
-    }]
+    submenu: [
+        {
+            type: "checkbox",
+            label: "Notification",
+            checked: settings.notifications,
+            click: () => {
+                const value = !settings.notifications;
+                settings.notifications = value;
+                notify("Settings", value ? "Notification enabled" : "Notification disabled", undefined);
+            }
+        },
+        {
+            enabled: !currentPlatform.isMacOs,
+            type: "checkbox",
+            label: "Minimize on close",
+            checked: !settings.quitOnClose,
+            click: () => {
+                settings.quitOnClose = !settings.quitOnClose;
+            }
+        },
+    ]
 };
 
 export const menuTemplate = (win: BrowserWindow, app: App): MenuItemConstructorOptions[] => {
