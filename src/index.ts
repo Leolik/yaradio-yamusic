@@ -1,4 +1,4 @@
-import { app, BrowserWindow, session } from "electron";
+import { app, BrowserWindow, session, systemPreferences } from "electron";
 import * as fs from "mz/fs";
 import * as path from "path";
 import { setAppBasePath, getRuntimePath } from "./app/media";
@@ -21,9 +21,18 @@ if (!appRunning) {
 
 setAppBasePath(app);
 
+systemPreferences.subscribeNotification(
+  "AppleInterfaceThemeChangedNotification",
+  () => {
+    if (win) {
+      registerContextMenu(win, app);
+    }
+  }
+)
+
 app.on("second-instance", () => {
   if (win) {
-    if (win.isMinimized()) {
+    if (win.isMinimized() || !win.isVisible()) {
       win.restore();
     }
     win.focus();
