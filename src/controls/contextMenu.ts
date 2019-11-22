@@ -1,4 +1,4 @@
-import { App, BrowserWindow, Menu, systemPreferences, Tray } from "electron";
+import { App, BrowserWindow, Menu, nativeTheme, Tray } from "electron";
 import { toggleWindowVisibility } from "../app/window";
 import { getIconFile } from "./../app/media";
 import { currentPlatform } from "./../app/platform";
@@ -38,12 +38,13 @@ export const register = (win: BrowserWindow, app: App) => {
 };
 
 function contextMenuIcon(): string {
-    if (currentPlatform.isMacOs) {
-        if (systemPreferences.isDarkMode()) {
-            return "yaradio_16x16_mono_white.png";
-        } else {
-            return "yaradio_16x16_mono_black.png";
-        }
+    if (currentPlatform.isLinux) {
+        return "yaradio_16x16.png";
     }
-    return "yaradio_16x16.png";
+    if (nativeTheme.shouldUseDarkColors) {
+        return "yaradio_16x16_mono_white.png";
+    } else {
+        return "yaradio_16x16_mono_black.png";
+    }
 }
+

@@ -1,4 +1,4 @@
-import { app, BrowserWindow, session, systemPreferences } from "electron";
+import { app, BrowserWindow, session, nativeTheme } from "electron";
 import * as fs from "mz/fs";
 import * as path from "path";
 import { setAppBasePath, getRuntimePath } from "./app/media";
@@ -21,15 +21,6 @@ if (!appRunning) {
 
 setAppBasePath(app);
 
-systemPreferences.subscribeNotification(
-  "AppleInterfaceThemeChangedNotification",
-  () => {
-    if (win) {
-      registerContextMenu(win, app);
-    }
-  }
-)
-
 app.on("second-instance", () => {
   if (win) {
     if (win.isMinimized() || !win.isVisible()) {
@@ -43,6 +34,10 @@ app.on("ready", () => {
   const lastWindowState = store.get("lastWindowState");
   const lastApp = store.get("lastApp");
   win = createWindow(lastWindowState);
+
+  nativeTheme.addListener("updated", () => {
+    registerContextMenu(win, app);
+  });
 
   if (process.env.node_env === "dev") {
     win.webContents.openDevTools({
