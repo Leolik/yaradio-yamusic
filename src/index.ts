@@ -68,11 +68,17 @@ app.on("ready", () => {
     }
   });
 
-  win.loadURL((() => {
-    if (lastApp === "YaMusic") {
-      return "https://music.yandex.ru/";
+  win.on("show", () => {
+    if (currentPlatform.isWindows) {
+      setTimeout(() => registerTaskbarMenu(win, app), 100);
     }
-    return "https://radio.yandex.ru/";
+  });
+
+  win.loadURL((() => {
+    if (lastApp.startsWith("radio")) {
+      return "https://radio.yandex.ru/";
+    }
+    return "https://music.yandex.ru/";
   })());
 
   win.setMenu(null);
@@ -100,9 +106,6 @@ app.on("ready", () => {
     // Notification for next song
     if (/start\?__t/.test(details.url)) {
       setTimeout(notify, 1000);
-      if (currentPlatform.isWindows) {
-        setTimeout(() => registerTaskbarMenu(win, app), 100);
-      }
     }
     callback({});
   });
@@ -115,5 +118,6 @@ app.on("before-quit", () => {
     store.set("lastWindowState", win.getBounds());
   }
 
-  store.set("lastApp", win.getTitle());
+  const url = new URL(win.webContents.getURL());
+  store.set("lastApp", url.host);
 });
