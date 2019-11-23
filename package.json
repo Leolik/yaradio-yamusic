@@ -19,13 +19,20 @@
         "package:win": "npm run package && electron-packager build/ --platform=win32 --arch=all --icon=build/media/icon/yaradio_64x64.ico --out=distr/win --overwrite=true",
         "package:linux": "npm run package && electron-packager build/ --platform=linux --arch=all --icon=build/media/icon/yaradio_64x64.ico  --out=distr/linux --overwrite=true",
         "package:mac": "npm run package && electron-packager build/ --platform=darwin,mas --arch=x64 --icon=build/media/icon/AppIcon.icns --out=distr/mac --overwrite=true --app-bundle-id=info.anodsplace.yamusic --app-category-type=public.app-category.music",
-        "gen:changelog": "github_changelog_generator -u dedpnd -p yaradio-yamusic"
+        "gen:changelog": "github_changelog_generator -u anod -p yaradio-yamusic"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/dedpnd/yaradio-yamusic.git"
+        "url": "git+https://github.com/anod/yaradio-yamusic.git"
     },
     "author": "dedpnd",
+    "contributors": [
+        {
+            "name": "Alex Gavrishev",
+            "email": "alex.gavrishev@gmail.com",
+            "url": "https://github.com/anod"
+        }
+    ],
     "license": "MIT",
     "keyword": [
         "electron",
@@ -57,6 +64,7 @@
         "cross-var": "^1.1.0",
         "electron": "^7.1.2",
         "electron-packager": "^14.0.6",
+        "electron-winstaller": "^4.0.0",
         "tslint": "^5.20.0",
         "typescript": "^3.7.0"
     }
