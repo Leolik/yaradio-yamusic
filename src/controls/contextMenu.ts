@@ -1,5 +1,4 @@
 import { App, BrowserWindow, Menu, nativeTheme, Tray } from "electron";
-import { toggleWindowVisibility } from "../app/window";
 import { getIconFile } from "./../app/media";
 import { currentPlatform } from "./../app/platform";
 import { menuSettings, menuTemplate } from "./template";
@@ -18,8 +17,12 @@ export const register = (win: BrowserWindow, app: App) => {
             type: "separator"
         },
         {
-            label: "Show/Hide App",
-            click: () => toggleWindowVisibility(win)
+            label: "Show",
+            click: () => win.show()
+        },
+        {
+            label: "Hide",
+            click: () => win.hide()
         },
         menuSettings,
         {
@@ -33,7 +36,7 @@ export const register = (win: BrowserWindow, app: App) => {
     appIcon.setContextMenu(ctxMenu);
     appIcon.addListener("click", (e) => {
         e.preventDefault();
-        toggleWindowVisibility(win);
+        win.show();
     });
 };
 

@@ -62,10 +62,10 @@
         "@types/request-promise": "^4.1.45",
         "copyfiles": "^2.1.1",
         "cross-var": "^1.1.0",
-        "electron": "^7.1.2",
-        "electron-packager": "^14.0.6",
+        "electron": "^7.1.7",
+        "electron-packager": "^14.1.1",
         "electron-winstaller": "^4.0.0",
         "tslint": "^5.20.0",
-        "typescript": "^3.7.0"
+        "typescript": "^3.7.4"
     }
 }
