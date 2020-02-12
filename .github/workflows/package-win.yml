@@ -26,4 +26,4 @@ jobs:
         # Artifact name
         name: WindBuild
         # Directory containing files to upload
-        path: build/
+        path: distr/
