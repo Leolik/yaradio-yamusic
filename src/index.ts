@@ -33,7 +33,7 @@ app.on("second-instance", () => {
 app.on("ready", () => {
   const lastWindowState = store.get("lastWindowState");
   win = createWindow(lastWindowState);
-  win.webContents.openDevTools({ mode: 'undocked' });
+  // win.webContents.openDevTools({ mode: 'undocked' });
 
   nativeTheme.addListener("updated", () => {
     registerContextMenu(win, app);
