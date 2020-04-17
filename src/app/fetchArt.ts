@@ -1,23 +1,14 @@
-import fs = require("mz/fs");
-import rp = require("request-promise");
+import fetch from "node-fetch";
 import { getAlbumArtFile } from "./media";
+import { writeFile } from "./writeFile";
 
-export const fetchAlbumArt = async (imageUrl: string): Promise<boolean> => {
-    const dataImg = await rp.get(imageUrl, { encoding: "binary" })
-        .catch((err) => {
-            console.error("Download image", err);
-        });
-
-    if (!dataImg) {
-        return false;
-    }
-    let result = true;
+export const fetchAlbumArt = async (imageUrl: string): Promise<void> => {
     try {
-        // eslint-disable-next-line @typescript-eslint/await-thenable
-        await fs.writeFile(getAlbumArtFile(), dataImg, { encoding: "binary" });
+        const response = await fetch(imageUrl);
+        const dataImg = await response.buffer();
+        await writeFile(getAlbumArtFile(), dataImg, { encoding: "binary" });
     } catch (error) {
-        console.error("Write image to a file", error);
-        result = false;
+        console.error("Download image", error);
+        throw error;
     }
-    return result;
 }

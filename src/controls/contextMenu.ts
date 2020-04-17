@@ -11,7 +11,7 @@ export const register = (win: BrowserWindow, app: App): void => {
         appIcon = undefined;
     }
 
-    const items = menuTemplate(win, app);
+    const items = menuTemplate(win);
     items.push(
         {
             type: "separator"

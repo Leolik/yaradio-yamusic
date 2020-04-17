@@ -1,5 +1,5 @@
 import { app, BrowserWindow, session, nativeTheme } from "electron";
-import * as fs from "mz/fs";
+import * as fs from "fs";
 import * as path from "path";
 import { setAppBasePath, getRuntimePath } from "./app/media";
 import { nextSongHandler } from "./app/nextSong";
@@ -33,6 +33,7 @@ app.on("second-instance", () => {
 app.on("ready", () => {
   const lastWindowState = store.get("lastWindowState");
   win = createWindow(lastWindowState);
+  win.webContents.openDevTools({ mode: 'undocked' });
 
   nativeTheme.addListener("updated", () => {
     registerContextMenu(win, app);

@@ -47,22 +47,28 @@ async function getInfoFromDOM(command: string, win: BrowserWindow): Promise<stri
   return await checkData();
 }
 
+async function fetchAndNotify(win: BrowserWindow): Promise<void> {
+  const [track, artist, image] = await Promise.all([
+    getInfoFromDOM(getTrack, win),
+    getInfoFromDOM(getArtist, win),
+    getInfoFromDOM(getImg, win)
+  ]);
+  if (track && artist) {
+    if (image) {
+      try {
+        await fetchAlbumArt(image);
+        notify(track, artist, true);
+      } catch (error) {
+        notify(track, artist, false);
+      }
+    } else {
+      notify(track, artist, false);
+    }
+  }
+};
+
 export const nextSongHandler = (win: BrowserWindow) => {
   return (): void => {
-    Promise.all([
-      getInfoFromDOM(getTrack, win),
-      getInfoFromDOM(getArtist, win),
-      getInfoFromDOM(getImg, win)
-    ]).then(([track, artist, image]) => {
-      if (track && artist) {
-        if (image) {
-          fetchAlbumArt(image).then(fetched => {
-            notify(track, artist, fetched);
-          });
-        } else {
-          notify(track, artist, false);
-        }
-      }
-    });
-  };
+    fetchAndNotify(win).catch(error => console.error(error));
+  }
 };
