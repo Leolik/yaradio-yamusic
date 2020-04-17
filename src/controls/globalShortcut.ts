@@ -1,26 +1,31 @@
 import { BrowserWindow, globalShortcut, App } from "electron";
 
-function shortcutTpl(win: BrowserWindow) {
+interface Shortcut {
+  accelerator: string;
+  func: () => void;
+}
+
+function shortcutTpl(win: BrowserWindow): Shortcut[] {
   return [{
       accelerator: "MediaPlayPause",
-      func: () => win.webContents.send("play"),
+      func: (): void => win.webContents.send("play"),
     },
     {
       accelerator: "MediaNextTrack",
-      func: () => win.webContents.send("next"),
+      func: (): void => win.webContents.send("next"),
     },
     {
       accelerator: "MediaPreviousTrack",
-      func: () => win.webContents.send("prev"),
+      func: (): void => win.webContents.send("prev"),
     },
     {
       accelerator: "VolumeMute",
-      func: () => win.webContents.send("mute"),
+      func: (): void => win.webContents.send("mute"),
     },
   ];
 }
 
-export const register = (win: BrowserWindow, app: App) => {
+export const register = (win: BrowserWindow, app: App): void => {
   const tplShortcut = shortcutTpl(win);
 
   tplShortcut.forEach((e) => {

@@ -32,7 +32,6 @@ app.on("second-instance", () => {
 
 app.on("ready", () => {
   const lastWindowState = store.get("lastWindowState");
-  const lastApp = store.get("lastApp");
   win = createWindow(lastWindowState);
 
   nativeTheme.addListener("updated", () => {
@@ -70,16 +69,11 @@ app.on("ready", () => {
 
   win.on("show", () => {
     if (currentPlatform.isWindows) {
-      setTimeout(() => registerTaskbarMenu(win, app), 100);
+      setTimeout(() => registerTaskbarMenu(win), 100);
     }
   });
 
-  win.loadURL((() => {
-    if (lastApp.startsWith("radio")) {
-      return "https://radio.yandex.ru/";
-    }
-    return "https://music.yandex.ru/";
-  })());
+  win.loadURL("https://music.yandex.ru/");
 
   win.setMenu(null);
   registerContextMenu(win, app);
@@ -97,14 +91,14 @@ app.on("ready", () => {
   const notify = nextSongHandler(win);
 
   session.defaultSession.webRequest.onBeforeRequest({ urls: ["*://*/*"] }, (details, callback) => {
-    if (/awaps.yandex.net/.test(details.url)
-      || /vh-bsvideo-converted/.test(details.url)
-      || /get-video-an/.test(details.url)) {
+    if ( details.url.includes("awaps.yandex.net")
+      || details.url.includes("vh-bsvideo-converted")
+      || details.url.includes("get-video-an")) {
       callback({ cancel: true });
       return;
     }
     // Notification for next song
-    if (/start\?__t/.test(details.url)) {
+    if (details.url.includes("start?__t")) {
       setTimeout(notify, 1000);
     }
     callback({});
@@ -117,7 +111,4 @@ app.on("before-quit", () => {
   if (!win.isFullScreen()) {
     store.set("lastWindowState", win.getBounds());
   }
-
-  const url = new URL(win.webContents.getURL());
-  store.set("lastApp", url.host);
 });

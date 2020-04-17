@@ -11,8 +11,8 @@ const create = (titleText: string, msg: string, imagePath: string): Notification
     });
 };
 
-export const notify = async (title: string, msg: string, albumArt: boolean) => {
-    if (!Notification.isSupported || !store.get("settings").notifications) {
+export const notify = (title: string, msg: string, albumArt: boolean): void => {
+    if (!Notification.isSupported() || !store.get("settings").notifications) {
         return;
     }
     if (albumArt) {

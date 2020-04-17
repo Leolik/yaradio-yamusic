@@ -1,7 +1,7 @@
 import { BrowserWindow, Menu, App } from "electron";
 import { menuTemplate, menuSettings } from "./template";
 
-export const register = (win: BrowserWindow, app: App) => {
+export const register = (win: BrowserWindow, app: App): void => {
   const items = menuTemplate(win, app);
   items.push(
     {

@@ -3,7 +3,7 @@ import * as path from "path";
 import { getIconFile, getRuntimePath } from "./media";
 import { currentPlatform } from "./platform";
 
-export function createWindow(lastWindowState: Electron.Rectangle) {
+export function createWindow(lastWindowState: Electron.Rectangle): BrowserWindow {
   const titleStyle = (currentPlatform.isMacOs) ? "customButtonsOnHover" : "hiddenInset";
   const mainWindow = new BrowserWindow({
     title: "Yandex.Music.App - Unofficial",

@@ -5,7 +5,7 @@ import { menuSettings, menuTemplate } from "./template";
 
 let appIcon: Tray;
 
-export const register = (win: BrowserWindow, app: App) => {
+export const register = (win: BrowserWindow, app: App): void => {
     if (appIcon) {
         appIcon.destroy();
         appIcon = undefined;

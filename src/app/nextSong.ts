@@ -40,15 +40,15 @@ const getImg = `
   })();
 `;
 
-async function getInfoFromDOM(command: string, win: BrowserWindow) {
-  const checkData = async () => {
+async function getInfoFromDOM(command: string, win: BrowserWindow): Promise<string> {
+  const checkData = async (): Promise<string>  => {
     return await win.webContents.executeJavaScript(command);
   };
   return await checkData();
 }
 
 export const nextSongHandler = (win: BrowserWindow) => {
-  return () => {
+  return (): void => {
     Promise.all([
       getInfoFromDOM(getTrack, win),
       getInfoFromDOM(getArtist, win),

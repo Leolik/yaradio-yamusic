@@ -4,7 +4,7 @@ import { App } from "electron";
 export let appBasePath = path.join(__dirname, "../");
 export const fetchArtFileName = "100x100.jpeg";
 
-export const setAppBasePath = (app: App) => {
+export const setAppBasePath = (app: App): void => {
     appBasePath = app.getAppPath();
 };
 

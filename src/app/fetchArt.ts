@@ -12,11 +12,12 @@ export const fetchAlbumArt = async (imageUrl: string): Promise<boolean> => {
         return false;
     }
     let result = true;
-    await fs.writeFile(getAlbumArtFile(), dataImg, { encoding: "binary" })
-        .catch((err) => {
-            console.error("Write image to a file", err);
-            result = false;
-        });
-
+    try {
+        // eslint-disable-next-line @typescript-eslint/await-thenable
+        await fs.writeFile(getAlbumArtFile(), dataImg, { encoding: "binary" });
+    } catch (error) {
+        console.error("Write image to a file", error);
+        result = false;
+    }
     return result;
 }
