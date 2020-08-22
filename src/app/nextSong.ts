@@ -41,10 +41,7 @@ const getImg = `
 `;
 
 async function getInfoFromDOM(command: string, win: BrowserWindow): Promise<string> {
-  const checkData = async (): Promise<string>  => {
-    return await win.webContents.executeJavaScript(command);
-  };
-  return await checkData();
+  return await (win.webContents.executeJavaScript(command) as Promise<string>);
 }
 
 async function fetchAndNotify(win: BrowserWindow): Promise<void> {
@@ -65,7 +62,7 @@ async function fetchAndNotify(win: BrowserWindow): Promise<void> {
       notify(track, artist, false);
     }
   }
-};
+}
 
 export const nextSongHandler = (win: BrowserWindow) => {
   return (): void => {

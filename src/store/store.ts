@@ -10,7 +10,7 @@ const defaultSettings: SettingsModel = {
   quitOnClose: true
 };
 
-interface StoreType {
+export interface StoreType {
   lastApp: string;
   lastWindowState: Electron.Rectangle;
   quit: boolean;

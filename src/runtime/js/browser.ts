@@ -13,7 +13,7 @@ const el = {
 };
 
 function exec(command: string): void {
-  webFrame.executeJavaScript(`if (!window.a) a = new Mu.Adapter(); ${command};`);
+  void webFrame.executeJavaScript(`if (!window.a) a = new Mu.Adapter(); ${command};`);
 }
 
 function click(querySelector: string): void {

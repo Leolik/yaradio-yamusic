@@ -1,8 +1,8 @@
 import * as Store from "electron-store";
-import { store as instance, SettingsModel } from "./store";
+import { store as instance, StoreType, SettingsModel } from "./store";
 
 class Settings implements SettingsModel {
-    constructor(private store: Store) { }
+    constructor(private store: Store<StoreType>) { }
 
     get notifications(): boolean {
         return this.settings.notifications;

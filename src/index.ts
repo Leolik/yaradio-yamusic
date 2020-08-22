@@ -74,7 +74,7 @@ app.on("ready", () => {
     }
   });
 
-  win.loadURL("https://music.yandex.ru/");
+  void win.loadURL("https://music.yandex.ru/");
 
   win.setMenu(null);
   registerContextMenu(win, app);
@@ -85,7 +85,8 @@ app.on("ready", () => {
 
   const page = win.webContents;
   page.on("dom-ready", () => {
-    page.insertCSS(fs.readFileSync(path.join(getRuntimePath(), "css", "styles.css"), "utf8"));
+    const css = fs.readFileSync(path.join(getRuntimePath(), "css", "styles.css"), "utf8")
+    void page.insertCSS(css);
     win.show();
   });
 
