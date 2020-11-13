@@ -3,7 +3,7 @@ import * as fs from "fs";
 import * as path from "path";
 import { setAppBasePath, getRuntimePath } from "./app/media";
 import { nextSongHandler } from "./app/nextSong";
-import { currentPlatform, PlatformType } from "./app/platform";
+import { currentPlatform, AppPlatform } from "./app/platform";
 import { createWindow } from "./app/window";
 import { register as registerContextMenu } from "./controls/contextMenu";
 import { register as registerDockMenu } from "./controls/dockMenu";
@@ -31,8 +31,7 @@ app.on("second-instance", () => {
 });
 
 app.on("ready", () => {
-  const lastWindowState = store.get("lastWindowState");
-  win = createWindow(lastWindowState);
+  win = createWindow(store.lastWindowState);
   // win.webContents.openDevTools({ mode: 'undocked' });
 
   nativeTheme.addListener("updated", () => {
@@ -50,18 +49,18 @@ app.on("ready", () => {
       return;
     }
 
-    if (!store.get("quit")) {
+    if (!store.quit) {
       e.preventDefault();
     }
 
     switch (currentPlatform.type) {
-      case PlatformType.Windows:
+      case AppPlatform.Windows:
         win.hide();
         break;
-      case PlatformType.Linux:
+      case AppPlatform.Linux:
         win.hide();
         break;
-      case PlatformType.MacOs:
+      case AppPlatform.MacOs:
         app.hide();
         break;
       default:
@@ -108,9 +107,9 @@ app.on("ready", () => {
 });
 
 app.on("before-quit", () => {
-  store.set("quit", true);
+  store.quit = true;
 
   if (!win.isFullScreen()) {
-    store.set("lastWindowState", win.getBounds());
+    store.lastWindowState = win.getBounds();
   }
 });

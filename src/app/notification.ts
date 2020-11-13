@@ -12,7 +12,7 @@ const create = (titleText: string, msg: string, imagePath: string): Notification
 };
 
 export const notify = (title: string, msg: string, albumArt: boolean): void => {
-    if (!Notification.isSupported() || !store.get("settings").notifications) {
+    if (!Notification.isSupported() || !store.settings.notifications) {
         return;
     }
     if (albumArt) {

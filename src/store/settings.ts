@@ -1,33 +1,26 @@
-import * as Store from "electron-store";
-import { store as instance, StoreType, SettingsModel } from "./store";
+import { StoreType, store as instance, SettingsModel } from "./store";
 
 class Settings implements SettingsModel {
-    constructor(private store: Store<StoreType>) { }
+    constructor(private store: StoreType) { }
 
     get notifications(): boolean {
-        return this.settings.notifications;
+        return this.store.settings.notifications;
     }
 
     set notifications(value: boolean) {
-        this.update(current => { current.notifications = value; });
+        const current = this.store.settings;
+        current.notifications = value;
+        this.store.settings = current;
     }
 
     get quitOnClose(): boolean {
-        return this.settings.quitOnClose;
+        return this.store.settings.quitOnClose;
     }
 
     set quitOnClose(value: boolean) {
-        this.update(current => { current.quitOnClose = value; });
-    }
-
-    private get settings(): SettingsModel {
-        return this.store.get("settings");
-    }
-
-    private update(callback: (current: SettingsModel) => void): void {
-        const current = this.settings;
-        callback(current);
-        this.store.set("settings", current);
+        const current = this.store.settings;
+        current.quitOnClose = value;
+        this.store.settings = current;
     }
 }
 
