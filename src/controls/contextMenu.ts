@@ -34,8 +34,8 @@ export const register = (win: BrowserWindow, app: App): void => {
 
     appIcon = new Tray(getIconFile(contextMenuIcon()));
     appIcon.setContextMenu(ctxMenu);
-    appIcon.addListener("click", (e) => {
-        e.preventDefault();
+    appIcon.addListener("click", () => {
+        // e.preventDefault();
         win.show();
     });
 };

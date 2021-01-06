@@ -4,8 +4,8 @@ module.exports = {
         "es6": true
     },
     "extends": [
-        "plugin:@typescript-eslint/recommended",
-        "plugin:@typescript-eslint/recommended-requiring-type-checking"
+        'eslint:recommended',
+        'plugin:@typescript-eslint/recommended',
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -14,7 +14,6 @@ module.exports = {
     },
     "plugins": [
         "@typescript-eslint",
-        "@typescript-eslint/tslint"
     ],
     "rules": {
         "@typescript-eslint/array-type": "error",
@@ -96,14 +95,5 @@ module.exports = {
         "spaced-comment": "error",
         "use-isnan": "error",
         "valid-typeof": "off",
-        "@typescript-eslint/tslint/config": [
-            "error",
-            {
-                "rules": {
-                    "jsdoc-format": true,
-                    "no-reference-import": true
-                }
-            }
-        ]
     }
 };

@@ -1,4 +1,5 @@
 
+// eslint-disable-next-line no-shadow
 export const enum AppPlatform {
     Other, Windows, MacOs, Linux
 }
