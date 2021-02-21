@@ -1,4 +1,4 @@
-import { App, BrowserWindow, Menu, nativeTheme, Tray } from "electron";
+import { App, BrowserWindow, Menu, Tray } from "electron";
 import { getIconFile } from "./../app/media";
 import { currentPlatform } from "./../app/platform";
 import { menuSettings, menuTemplate } from "./template";
@@ -44,10 +44,6 @@ function contextMenuIcon(): string {
     if (currentPlatform.isLinux) {
         return "yaradio_16x16.png";
     }
-    if (nativeTheme.shouldUseDarkColors) {
-        return "yaradio_16x16_mono_white.png";
-    } else {
-        return "yaradio_16x16_mono_black.png";
-    }
+    return "MenuBarTemplate.png";
 }
 
