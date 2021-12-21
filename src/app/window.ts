@@ -13,7 +13,7 @@ export function createWindow(lastWindowState: Electron.Rectangle): BrowserWindow
     icon: getIconFile("yaradio_32x32.png"),
     movable: true,
     minHeight: 700,
-    minWidth: 848,
+    minWidth: 500,
     autoHideMenuBar: true,
     backgroundColor: "#fff",
     webPreferences: {
