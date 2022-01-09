@@ -18,6 +18,6 @@ export const notify = (title: string, msg: string, albumArt: boolean): void => {
     if (albumArt) {
         create(title, msg, getAlbumArtFile()).show();
     } else {
-        create(title, msg, getIconFile("yaradio_64x64.png")).show();
+        create(title, msg, getIconFile("yamusic_64x64.png")).show();
     }
 };

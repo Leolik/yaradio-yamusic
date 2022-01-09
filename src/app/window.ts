@@ -10,7 +10,7 @@ export function createWindow(lastWindowState: Electron.Rectangle): BrowserWindow
     y: lastWindowState.y === -1 ? undefined : lastWindowState.y,
     height: lastWindowState.height || 700,
     width: lastWindowState.width || 848,
-    icon: getIconFile("yaradio_32x32.png"),
+    icon: getIconFile("yamusic_32x32.png"),
     movable: true,
     minHeight: 700,
     minWidth: 500,

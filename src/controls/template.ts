@@ -1,26 +1,26 @@
 import { BrowserWindow, MenuItemConstructorOptions } from "electron";
 import { notify } from "../app/notification";
-import { settings } from "../store/settings";
 import { currentPlatform } from "../app/platform";
+import { settings } from "../store/settings";
 
 export const menuSettings: MenuItemConstructorOptions = {
     type: "submenu",
-    label: "Settings",
+    label: "Настройки",
     submenu: [
         {
             type: "checkbox",
-            label: "Notification",
+            label: "Уведомления",
             checked: settings.notifications,
             click: (): void => {
                 const value = !settings.notifications;
                 settings.notifications = value;
-                notify("Settings", value ? "Notification enabled" : "Notification disabled", undefined);
+                notify("Настройки", value ? "Уведомления включены" : "Уведомления отключены", undefined);
             }
         },
         {
             enabled: !currentPlatform.isMacOs,
             type: "checkbox",
-            label: "Minimize on close",
+            label: "Сворачивать в трей при закрытии",
             checked: !settings.quitOnClose,
             click: (): void => {
                 settings.quitOnClose = !settings.quitOnClose;
@@ -32,22 +32,22 @@ export const menuSettings: MenuItemConstructorOptions = {
 export const menuTemplate = (win: BrowserWindow): MenuItemConstructorOptions[] => {
     return [
         {
-            label: "Play | Pause",
+            label: "Воспроизведение | Пауза",
             click: (): void => win.webContents.send("play")
         },
         {
-            label: "Next Track",
+            label: "Следующий трек",
             click: (): void => win.webContents.send("next")
         },
         {
             type: "separator"
         },
         {
-            label: "Like",
+            label: "Нравится",
             click: (): void => win.webContents.send("like")
         },
         {
-            label: "Dislike",
+            label: "Не нравится",
             click: (): void => win.webContents.send("dislike")
         }
     ];

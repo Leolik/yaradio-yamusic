@@ -17,16 +17,16 @@ export const register = (win: BrowserWindow, app: App): void => {
             type: "separator"
         },
         {
-            label: "Show",
+            label: "Показать",
             click: () => win.show()
         },
         {
-            label: "Hide",
+            label: "Скрыть",
             click: () => win.hide()
         },
         menuSettings,
         {
-            label: "Quit",
+            label: "Закрыть",
             click: () => app.quit()
         }
     );
@@ -46,4 +46,3 @@ function contextMenuIcon(): string {
     }
     return "MenuBarTemplate.png";
 }
-
